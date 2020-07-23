@@ -1,34 +1,28 @@
-version: '3'
-services:
-
-  mysql:
+version: '3.3'
+  
+ services:
+  db:
     image: mysql:5.7
-    environment:
-      - MYSQL_USER=root
-      - MYSQL_ROOT_PASSWORD=root
     volumes:
-      - /var/lib/mysql-test:/var/lib/mysql
-      - ./mysql_init/:/docker-entrypoint-initdb.d/
-    networks:
-      - mysqldb
+    - db_data:/var/lib/mysql
     restart: always
-    ports:
-      - "3305:3306"
-
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin:5.0.2
     environment:
-      - PMA_HOST=mysql
-    networks:
-      - mysqldb
-    ports:
-      - "8022:80"
+      MYSQL_ROOT_PASSWORD: somewordpress
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+  
+  wordpress:
     depends_on:
-      - mysql
+    - db
+    image: wordpress:latest
+    ports:
+    - "8000:80"
     restart: always
-
-
-networks:
-  mysqldb:
-    external:
-      name: test-mysql
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+ volumes:
+   db_data: {}
