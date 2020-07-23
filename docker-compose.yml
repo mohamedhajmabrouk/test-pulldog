@@ -25,4 +25,4 @@ version: '3.3'
       WORDPRESS_DB_PASSWORD: wordpress
       WORDPRESS_DB_NAME: wordpress
  volumes:
-   db_data: {}
+   "./data/db/mysql:/var/lib/mysql" 
